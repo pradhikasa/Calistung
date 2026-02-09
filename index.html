@@ -861,19 +861,20 @@
     let brushColor = 'black';
 
     function initCanvas() {
-        // Ambil ukuran aktual dari elemen CSS
-        const rect = canvas.getBoundingClientRect();
-        
-        // Set ukuran internal canvas sesuai ukuran tampilan
-        canvas.width = rect.width || 320; 
-        canvas.height = rect.height || 320;
-        
-        // Reset setting context karena set resize canvas ter-reset
-        ctx.lineJoin = 'round'; 
-        ctx.lineCap = 'round'; 
-        ctx.lineWidth = 10; 
-        ctx.strokeStyle = brushColor;
-    }
+    // 1. Ambil ukuran sebenarnya yang terlihat di layar (sesuai CSS)
+    const rect = canvas.getBoundingClientRect();
+    
+    // 2. Set ukuran "internal" kanvas sama persis dengan ukuran tampilan
+    // Jika rect.width gagal diambil (misal 0), gunakan 320 sebagai cadangan
+    canvas.width = rect.width || 320; 
+    canvas.height = rect.height || 320;
+    
+    // 3. Reset setting drawing (karena reset ukuran kanvas mereset setting gambar)
+    ctx.lineJoin = 'round'; 
+    ctx.lineCap = 'round'; 
+    ctx.lineWidth = 10; 
+    ctx.strokeStyle = brushColor;
+}
 
     function getPos(e) {
         const rect = canvas.getBoundingClientRect();
