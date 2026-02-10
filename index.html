@@ -294,26 +294,63 @@
         @keyframes fall { to { transform: translateY(800px) rotate(720deg); } }
         .score-board { font-size: 1.5rem; color: var(--primary); margin-bottom: 10px; font-weight: 900; background: white; padding: 5px 20px; border-radius: 50px; box-shadow: 0 4px 10px rgba(43, 52, 103, 0.05); border: 2px solid var(--secondary); }
 
-        /* RESPONSIVE */
+        /* =========================================
+           RESPONSIVE (Hanya resize, Ubah Layout minimal)
+           ========================================= */
         @media (max-width: 768px) {
-            body { background: white; }
-            .bg-shape { display: none; }
-            #app-container { width: 100%; height: 100vh; max-height: none; border-radius: 0; border: none; box-shadow: none; }
+            body { background: white; } /* Background bersih di HP */
+            .bg-shape { display: none; } /* Matikan animasi bg biar HP tidak berat */
+
+            #app-container {
+                width: 100%;
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+            }
+
             header { margin: 0; padding: 10px 15px; border-radius: 0; }
             h1 { font-size: 1.2rem; }
-            .home-btn span { display: none; }
+            .home-btn { padding: 5px 10px; font-size: 0.8rem; }
+            .home-btn span { display: none; } /* Sembunyikan text menu */
+
             .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; padding-bottom: 20px; }
+            .menu-card { padding: 15px 5px; }
             .menu-icon { font-size: 3rem; }
             .menu-title { font-size: 1rem; }
+
             .screen { padding: 15px; }
+
+            /* Scale down elements agar muat */
             .letter-box { width: 90px; height: 90px; font-size: 3.5rem; }
             .letter-box.arabic { width: 140px; height: 140px; font-size: 6rem; }
             .letter-image-container { height: 160px; }
             .letter-image { font-size: 7rem; }
+            
+            .word-label { font-size: 1.5rem; padding: 8px 20px; }
+            .image-name-label { font-size: 1.2rem; margin-bottom: 20px; }
+            
+            .flashcard { padding: 20px; }
             .flashcard-img { font-size: 6rem; }
             .spelling-letter { width: 40px; height: 50px; font-size: 1.8rem; }
-            .writing-target-display, .canvas-container { width: 180px; height: 180px; }
+
+            /* Math Mobile */
+            .cloud { width: 120px; min-height: 100px; border-width: 3px; }
+            .candy { font-size: 2rem; }
+            .math-operator { font-size: 3rem; }
+            .numpad { max-width: 280px; gap: 8px; }
+            .num-btn { font-size: 1.5rem; padding: 12px; }
+
+            /* Writing Mobile - Agar rapi di layar kecil */
+            .writing-target-display, .canvas-container {
+                width: 180px; height: 180px; /* Ukuran tetap lebih kecil tapi rapi */
+            }
             .writing-target-display { font-size: 2.5rem; }
+            
+            .nav-btn { padding: 10px 20px; font-size: 1rem; }
+            .modal-content { padding: 30px; }
+            .modal-icon { font-size: 4rem; }
         }
     </style>
 </head>
@@ -330,6 +367,7 @@
         <div style="width: 70px;"></div> 
     </header>
 
+    <!-- MENU UTAMA -->
     <div id="screen-home" class="screen active">
         <h2 style="color: var(--primary); margin-top: 20px; font-size: 2rem; text-shadow: 2px 2px 0px rgba(255,255,255,0.5);">Pilih Pelajaran:</h2>
         <div class="menu-grid">
@@ -360,6 +398,7 @@
         </div>
     </div>
 
+    <!-- SCREEN ABJAD INDONESIA -->
     <div id="screen-alphabet" class="screen">
         <h2 style="color: var(--secondary); font-size: 2rem; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">Belajar Abjad</h2>
         <div class="letter-display">
@@ -371,6 +410,7 @@
         <div class="controls"><button class="nav-btn" onclick="prevIndo()">⬅️</button><button class="nav-btn" onclick="nextIndo()">➡️</button></div>
     </div>
 
+    <!-- SCREEN ALPHABET INGGRIS -->
     <div id="screen-english" class="screen">
         <h2 style="color: var(--primary); font-size: 2rem; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">Learn Alphabet</h2>
         <div class="letter-display">
@@ -382,6 +422,7 @@
         <div class="controls"><button class="nav-btn" onclick="prevEng()">⬅️</button><button class="nav-btn" onclick="nextEng()">➡️</button></div>
     </div>
 
+    <!-- SCREEN HURUF HIJAIYAH -->
     <div id="screen-arabic" class="screen">
         <h2 style="color: var(--primary); font-size: 2rem; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">Belajar Hijaiyah</h2>
         <div style="display: flex; justify-content: center; margin: 20px 0;">
@@ -393,6 +434,7 @@
         <div class="controls"><button class="nav-btn" onclick="prevArab()">⬅️</button><button class="nav-btn" onclick="nextArab()">➡️</button></div>
     </div>
 
+    <!-- SCREEN MEMBACA -->
     <div id="screen-reading" class="screen">
         <h2 style="color: var(--primary); font-size: 2rem; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">Belajar Ejaan</h2>
         <div class="flashcard">
@@ -402,6 +444,7 @@
         <div class="controls"><button class="nav-btn" onclick="prevCard()">⬅️</button><button class="nav-btn" onclick="nextCard()">➡️</button></div>
     </div>
 
+    <!-- SCREEN BERHITUNG -->
     <div id="screen-math" class="screen">
         <div class="score-board">Skor: <span id="score">0</span> ⭐</div>
         <h2 style="color: var(--primary); font-size: 2rem; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">Hitunglah!</h2>
@@ -422,10 +465,13 @@
         </div>
     </div>
 
+    <!-- SCREEN MENULIS -->
     <div id="screen-writing" class="screen">
         <h2 style="color: var(--primary); font-size: 2rem; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">Latihan Menulis</h2>
+        
         <div class="writing-prompt">Silakan tulis:</div>
         <div class="writing-target-display" id="writing-target">A</div>
+
         <div class="toolbar">
             <div class="color-btn active" style="background: black;" onclick="setColor('black', this)"></div>
             <div class="color-btn" style="background: #2B3467;" onclick="setColor('#2B3467', this)"></div>
@@ -433,7 +479,9 @@
             <div class="color-btn" style="background: #FFD166;" onclick="setColor('#FFD166', this)"></div>
             <div class="color-btn" style="background: #EF476F;" onclick="setColor('#EF476F', this)"></div>
         </div>
+
         <canvas id="drawing-board" class="canvas-container"></canvas>
+
         <div class="writing-controls">
             <button class="nav-btn" onclick="prevWritingTarget()">⬅️</button>
             <button class="tool-btn" onclick="clearWritingCanvas()">🗑️ Hapus</button>
@@ -441,13 +489,14 @@
         </div>
     </div>
 
+    <!-- MODAL -->
     <div id="feedback-modal">
         <div class="modal-content">
             <span class="modal-icon" id="fb-icon">🎉</span>
             <div class="modal-text" id="fb-text">Hebat!</div>
+            <!-- Tombol disembunyikan secara default (display: none) -->
             <button id="modal-btn" class="nav-btn" style="display: none;" onclick="closeFeedback()">Lanjut</button>
         </div>
-    </div>
 </div>
 
 <script>
@@ -479,7 +528,7 @@
     const arabicData = [
         { char: 'ا', name: 'ALIF', img: '🐰', imgName: 'أَرْنَب' }, { char: 'ب', name: 'BA', img: '🏠', imgName: 'بَيْت' },
         { char: 'ت', name: 'TA', img: '🍅', imgName: 'طَمَاتِم' }, { char: 'ث', name: 'TSA', img: '🐦', imgName: 'طَائِر' }, 
-        { char: 'ج', name: 'JIM', img: '⛰️', imgName: 'جَبَل' }, { char: 'ح', name: 'HA', img: '🛁', imgName: 'حَمَّام' }, 
+        { char: 'ج', name: 'JIM', img: '⛰️', imgName: 'جَبَل' }, { char: 'ح', name: 'HA', img: '🛁', imgName: 'حَمَّام' }, 
         { char: 'خ', name: 'KHO', img: '🍞', imgName: 'خُبْز' }, { char: 'د', name: 'DAL', img: '🐻', imgName: 'دُبّ' }, 
         { char: 'ذ', name: 'DZAL', img: '🪰', imgName: 'ذُبَاب' }, { char: 'ر', name: 'RO', img: '👨', imgName: 'رَجُل' }, 
         { char: 'ز', name: 'ZAI', img: '🌹', imgName: 'زَهْرَة' }, { char: 'س', name: 'SIN', img: '🐟', imgName: 'سَمَكَة' }, 
@@ -506,21 +555,7 @@
         ..."0123456789".split('').map(c => ({ char: c, type: 'Angka' }))
     ];
 
-    /* --- LOGIC AUDIO UPGRADE --- */
-    function suaraCalistung(teks, lang = 'id') {
-        if (window.currentAudio) { window.currentAudio.pause(); }
-        const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(teks)}&tl=${lang}&client=tw-ob`;
-        const audio = new Audio(url);
-        window.currentAudio = audio;
-        audio.play().catch(() => {
-            // Fallback jika diblokir browser
-            const msg = new SpeechSynthesisUtterance(teks);
-            msg.lang = lang === 'id' ? 'id-ID' : 'en-US';
-            msg.rate = 0.9;
-            window.speechSynthesis.speak(msg);
-        });
-    }
-
+    /* --- LOGIC --- */
     let indices = { indo: 0, eng: 0, arab: 0, card: 0, writing: 0 };
     let mathState = { answer: 0, input: "", score: 0 };
     const candyEmojis = ["🍬", "🍭", "🍫", "🍩", "🍪", "🍎", "🍊", "🍇"];
@@ -528,11 +563,20 @@
     function showScreen(name) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(`screen-${name}`).classList.add('active');
-        const titles = { 'home': 'Ayo Belajar!', 'alphabet': 'Abjad (Indo)', 'english': 'Alphabet (Eng)', 'arabic': 'Hijaiyah', 'reading': 'Membaca', 'math': 'Berhitung', 'writing': 'Menulis' };
+        
+        const titles = { 
+            'home': 'Ayo Belajar!', 'alphabet': 'Abjad (Indo)', 'english': 'Alphabet (Eng)', 
+            'arabic': 'Hijaiyah', 'reading': 'Membaca', 'math': 'Berhitung', 'writing': 'Menulis' 
+        };
         document.getElementById('page-title').innerText = titles[name];
-        if(name === 'writing') { setTimeout(() => { initCanvas(); updateWritingTarget(); }, 50); }
+        
+        if(name === 'writing') {
+            setTimeout(() => {
+                initCanvas();
+                updateWritingTarget();
+            }, 50);
+        }
         if(name === 'math') generateMath();
-        if(name !== 'home') suaraCalistung("Ayo belajar " + titles[name]);
     }
 
     function goHome() { showScreen('home'); }
@@ -541,7 +585,6 @@
         const d = indoData[indices.indo];
         document.getElementById('indo-upper').innerText = d.u; document.getElementById('indo-lower').innerText = d.l;
         document.getElementById('indo-img').innerText = d.img; document.getElementById('indo-word').innerText = d.word;
-        suaraCalistung(d.u + "... " + d.word);
     }
     function nextIndo() { indices.indo = (indices.indo + 1) % indoData.length; updateIndo(); }
     function prevIndo() { indices.indo = (indices.indo - 1 + indoData.length) % indoData.length; updateIndo(); }
@@ -550,7 +593,6 @@
         const d = engData[indices.eng];
         document.getElementById('eng-upper').innerText = d.u; document.getElementById('eng-lower').innerText = d.l;
         document.getElementById('eng-img').innerText = d.img; document.getElementById('eng-word').innerText = d.word;
-        suaraCalistung(d.u + "... " + d.word, 'en');
     }
     function nextEng() { indices.eng = (indices.eng + 1) % engData.length; updateEng(); }
     function prevEng() { indices.eng = (indices.eng - 1 + engData.length) % engData.length; updateEng(); }
@@ -559,7 +601,6 @@
         const d = arabicData[indices.arab];
         document.getElementById('arab-char').innerText = d.char; document.getElementById('arab-img').innerText = d.img;
         document.getElementById('arab-name').innerText = d.name; document.getElementById('arab-img-name').innerText = d.imgName;
-        suaraCalistung(d.name);
     }
     function nextArab() { indices.arab = (indices.arab + 1) % arabicData.length; updateArab(); }
     function prevArab() { indices.arab = (indices.arab - 1 + arabicData.length) % arabicData.length; updateArab(); }
@@ -567,8 +608,9 @@
     function updateCard() {
         const data = cards[indices.card];
         document.getElementById('card-img').innerText = data.img;
+        const imgEl = document.getElementById('card-img');
+        imgEl.style.animation = 'none'; imgEl.offsetHeight; imgEl.style.animation = 'bounceSoft 2s infinite';
         const container = document.getElementById('spelling-container'); container.innerHTML = '';
-        suaraCalistung(data.word + "... " + data.word.split('').join(', '));
         data.word.split('').forEach((letter, i) => {
             const box = document.createElement('div'); box.className = 'spelling-letter';
             box.innerText = letter; box.style.animationDelay = `${i * 0.1}s`; container.appendChild(box);
@@ -580,11 +622,11 @@
     function updateWritingTarget() {
         const target = writingTargets[indices.writing];
         document.getElementById('writing-target').innerText = target.char;
-        suaraCalistung("Tulis huruf " + target.char);
-        clearCanvas(); 
+        clearWritingCanvas(); 
     }
     function nextWritingTarget() { indices.writing = (indices.writing + 1) % writingTargets.length; updateWritingTarget(); }
     function prevWritingTarget() { indices.writing = (indices.writing - 1 + writingTargets.length) % writingTargets.length; updateWritingTarget(); }
+    function clearWritingCanvas() { clearCanvas(); }
 
     function generateMath() {
         document.getElementById('cloud-left').innerHTML=''; document.getElementById('cloud-right').innerHTML=''; 
@@ -594,13 +636,15 @@
         mathState.answer = op==='+'?n1+n2:n1-n2;
         document.getElementById('math-operator').innerText=op;
         fillCloud('cloud-left',n1); fillCloud('cloud-right',n2);
-        suaraCalistung(`${n1} ${op === '+' ? 'tambah' : 'kurang'} ${n2}, berapa jawabannya?`);
     }
     function fillCloud(id,count){
-        const container=document.getElementById(id); const emoji=candyEmojis[Math.floor(Math.random()*candyEmojis.length)];
-        for(let i=0;i<count;i++){ const el=document.createElement('span'); el.className='candy'; el.innerText=emoji; container.appendChild(el); }
+        const container=document.getElementById(id);
+        const emoji=candyEmojis[Math.floor(Math.random()*candyEmojis.length)];
+        for(let i=0;i<count;i++){
+            const el=document.createElement('span'); el.className='candy'; el.innerText=emoji; container.appendChild(el);
+        }
     }
-    function inputNum(n){ if(mathState.input.length<2){ mathState.input+=n; document.getElementById('math-answer').innerText=mathState.input; suaraCalistung(n.toString()); } }
+    function inputNum(n){ if(mathState.input.length<2){ mathState.input+=n; document.getElementById('math-answer').innerText=mathState.input; } }
     function clearAnswer(){ mathState.input=""; document.getElementById('math-answer').innerText="?"; }
     function checkAnswer(){
         if(mathState.input==="")return;
@@ -608,48 +652,79 @@
         if(parseInt(mathState.input)===mathState.answer){
             mathState.score+=10; document.getElementById('score').innerText=mathState.score;
             document.getElementById('fb-icon').innerText="🎉"; document.getElementById('fb-text').innerText="Benar!"; createConfetti();
-            suaraCalistung("Hore, kamu hebat! Jawabannya benar.");
         }else{
             document.getElementById('fb-icon').innerText="🥺"; document.getElementById('fb-text').innerText=`Jawabannya ${mathState.answer}`;
-            suaraCalistung("Yah, kurang tepat. Jawabannya adalah " + mathState.answer);
         }
+        
+        // Tampilkan tombol "Lanjut" saat di Game Math
         document.getElementById('modal-btn').style.display = 'block';
+        
         modal.style.display='flex';
     }
     function closeFeedback(){ document.getElementById('feedback-modal').style.display='none'; generateMath(); }
 
-    /* --- CANVAS --- */
     const canvas=document.getElementById('drawing-board'); const ctx=canvas.getContext('2d');
     let isDrawing=false; let brushColor='black';
-    function initCanvas(){ const rect=canvas.getBoundingClientRect(); canvas.width=rect.width; canvas.height=rect.height; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.lineWidth=10; ctx.strokeStyle=brushColor; }
-    function getPos(e){ const rect=canvas.getBoundingClientRect(); const clientX=e.touches?e.touches[0].clientX:e.clientX; const clientY=e.touches?e.touches[0].clientY:e.clientY; return{x:clientX-rect.left, y:clientY-rect.top}; }
+    
+    function initCanvas(){
+        const rect=canvas.getBoundingClientRect();
+        canvas.width=rect.width; canvas.height=rect.height;
+        ctx.lineJoin='round'; ctx.lineCap='round'; ctx.lineWidth=10; ctx.strokeStyle=brushColor;
+    }
+    window.addEventListener('resize', ()=>{
+        if(document.getElementById('screen-writing').classList.contains('active')) initCanvas();
+    });
+
+    function getPos(e){
+        const rect=canvas.getBoundingClientRect();
+        const clientX=e.touches?e.touches[0].clientX:e.clientX;
+        const clientY=e.touches?e.touches[0].clientY:e.clientY;
+        return{x:clientX-rect.left, y:clientY-rect.top};
+    }
     function startDrawing(e){ isDrawing=true; const p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); e.preventDefault(); }
-    function draw(e){ if(!isDrawing)return; const p=getPos(e); ctx.strokeStyle=brushColor; ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p.x,p.y); e.preventDefault(); }
+    function draw(e){
+        if(!isDrawing)return;
+        const p=getPos(e); ctx.strokeStyle=brushColor; ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p.x,p.y); e.preventDefault();
+    }
     function stopDrawing(){ isDrawing=false; }
     canvas.addEventListener('mousedown',startDrawing); canvas.addEventListener('mousemove',draw); canvas.addEventListener('mouseup',stopDrawing);
     canvas.addEventListener('touchstart',startDrawing,{passive:false}); canvas.addEventListener('touchmove',draw,{passive:false}); canvas.addEventListener('touchend',stopDrawing);
+
     function setColor(c,b){ brushColor=c; document.querySelectorAll('.color-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); }
     function clearCanvas(){ ctx.clearRect(0,0,canvas.width,canvas.height); }
-    function clearWritingCanvas(){ clearCanvas(); }
 
     function createConfetti(){
         const colors=['#2B3467','#BAD7E9','#FFD166','#EF476F','#06D6A0'];
+        const container=document.getElementById('app-container');
         for(let i=0;i<50;i++){
             const conf=document.createElement('div'); conf.classList.add('confetti');
-            conf.style.left=Math.random()*100+'%'; conf.style.top='-20px'; conf.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
-            conf.style.animationDuration=(Math.random()*3+2)+'s'; document.getElementById('app-container').appendChild(conf);
-            setTimeout(()=>conf.remove(),5000);
+            conf.style.left=Math.random()*100+'%'; conf.style.top='-20px';
+            conf.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+            conf.style.animationDuration=(Math.random()*3+2)+'s';
+            conf.style.transform=`rotate(${Math.random()*360}deg)`;
+            container.appendChild(conf); setTimeout(()=>conf.remove(),5000);
         }
     }
 
+    // Init & Popup Awal
     window.onload = function() {
         updateIndo(); updateEng(); updateArab(); updateCard();
+        
+        // Tampilkan Popup Awal
         const modal = document.getElementById('feedback-modal');
-        document.getElementById('fb-icon').innerText = "👋";
-        document.getElementById('fb-text').innerText = "Halo!";
+        const btn = document.getElementById('modal-btn');
+        
+        document.getElementById('fb-icon').innerText = "👋"; // Emoji Melambai
+        document.getElementById('fb-text').innerText = "Halo!"; // Teks Halo
         modal.style.display = 'flex';
-        suaraCalistung("Halo! Ayo kita belajar bersama Pradhika!");
-        setTimeout(() => { modal.style.display = 'none'; }, 2500);
+        
+        // Pastikan tombol disembunyikan saat awal
+        btn.style.display = 'none';
+        
+        // Auto close setelah 2.5 detik
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 2500);
     };
 </script>
 </body>
