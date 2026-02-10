@@ -528,7 +528,7 @@
     const arabicData = [
         { char: 'ا', name: 'ALIF', img: '🐰', imgName: 'أَرْنَب' }, { char: 'ب', name: 'BA', img: '🏠', imgName: 'بَيْت' },
         { char: 'ت', name: 'TA', img: '🍅', imgName: 'طَمَاتِم' }, { char: 'ث', name: 'TSA', img: '🐦', imgName: 'طَائِر' }, 
-        { char: 'ج', name: 'JIM', img: '⛰️', imgName: 'جَبَل' }, { char: 'ح', name: 'HA', img: '🛁', imgName: 'حَمَّام' }, 
+        { char: 'ج', name: 'JIM', img: '⛰️', imgName: 'جَبَل' }, { char: 'ح', name: 'HA', img: '🛁', imgName: 'حَمَّام' }, 
         { char: 'خ', name: 'KHO', img: '🍞', imgName: 'خُبْز' }, { char: 'د', name: 'DAL', img: '🐻', imgName: 'دُبّ' }, 
         { char: 'ذ', name: 'DZAL', img: '🪰', imgName: 'ذُبَاب' }, { char: 'ر', name: 'RO', img: '👨', imgName: 'رَجُل' }, 
         { char: 'ز', name: 'ZAI', img: '🌹', imgName: 'زَهْرَة' }, { char: 'س', name: 'SIN', img: '🐟', imgName: 'سَمَكَة' }, 
@@ -555,6 +555,18 @@
         ..."0123456789".split('').map(c => ({ char: c, type: 'Angka' }))
     ];
 
+    /* --- AUDIO CORE --- */
+    function suaraCalistung(teks, lang = 'id-ID') {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(teks);
+            msg.lang = lang;
+            msg.pitch = 1.2;
+            msg.rate = 0.9;
+            window.speechSynthesis.speak(msg);
+        }
+    }
+
     /* --- LOGIC --- */
     let indices = { indo: 0, eng: 0, arab: 0, card: 0, writing: 0 };
     let mathState = { answer: 0, input: "", score: 0 };
@@ -577,6 +589,9 @@
             }, 50);
         }
         if(name === 'math') generateMath();
+        
+        // Suara saat masuk menu
+        if(name !== 'home') suaraCalistung("Mari belajar " + titles[name]);
     }
 
     function goHome() { showScreen('home'); }
@@ -585,6 +600,7 @@
         const d = indoData[indices.indo];
         document.getElementById('indo-upper').innerText = d.u; document.getElementById('indo-lower').innerText = d.l;
         document.getElementById('indo-img').innerText = d.img; document.getElementById('indo-word').innerText = d.word;
+        suaraCalistung(d.u + ", " + d.word);
     }
     function nextIndo() { indices.indo = (indices.indo + 1) % indoData.length; updateIndo(); }
     function prevIndo() { indices.indo = (indices.indo - 1 + indoData.length) % indoData.length; updateIndo(); }
@@ -593,6 +609,7 @@
         const d = engData[indices.eng];
         document.getElementById('eng-upper').innerText = d.u; document.getElementById('eng-lower').innerText = d.l;
         document.getElementById('eng-img').innerText = d.img; document.getElementById('eng-word').innerText = d.word;
+        suaraCalistung(d.u + ", " + d.word, 'en-US');
     }
     function nextEng() { indices.eng = (indices.eng + 1) % engData.length; updateEng(); }
     function prevEng() { indices.eng = (indices.eng - 1 + engData.length) % engData.length; updateEng(); }
@@ -601,6 +618,7 @@
         const d = arabicData[indices.arab];
         document.getElementById('arab-char').innerText = d.char; document.getElementById('arab-img').innerText = d.img;
         document.getElementById('arab-name').innerText = d.name; document.getElementById('arab-img-name').innerText = d.imgName;
+        suaraCalistung(d.name);
     }
     function nextArab() { indices.arab = (indices.arab + 1) % arabicData.length; updateArab(); }
     function prevArab() { indices.arab = (indices.arab - 1 + arabicData.length) % arabicData.length; updateArab(); }
@@ -611,6 +629,10 @@
         const imgEl = document.getElementById('card-img');
         imgEl.style.animation = 'none'; imgEl.offsetHeight; imgEl.style.animation = 'bounceSoft 2s infinite';
         const container = document.getElementById('spelling-container'); container.innerHTML = '';
+        
+        let ejaan = data.word.split('').join('... ');
+        suaraCalistung(data.word + ". " + ejaan);
+
         data.word.split('').forEach((letter, i) => {
             const box = document.createElement('div'); box.className = 'spelling-letter';
             box.innerText = letter; box.style.animationDelay = `${i * 0.1}s`; container.appendChild(box);
@@ -622,6 +644,7 @@
     function updateWritingTarget() {
         const target = writingTargets[indices.writing];
         document.getElementById('writing-target').innerText = target.char;
+        suaraCalistung("Tulis huruf " + target.char);
         clearWritingCanvas(); 
     }
     function nextWritingTarget() { indices.writing = (indices.writing + 1) % writingTargets.length; updateWritingTarget(); }
@@ -636,6 +659,9 @@
         mathState.answer = op==='+'?n1+n2:n1-n2;
         document.getElementById('math-operator').innerText=op;
         fillCloud('cloud-left',n1); fillCloud('cloud-right',n2);
+        
+        let bacaOp = op === '+' ? "ditambah" : "dikurang";
+        suaraCalistung(`${n1} ${bacaOp} ${n2}. Berapa ya?`);
     }
     function fillCloud(id,count){
         const container=document.getElementById(id);
@@ -644,7 +670,13 @@
             const el=document.createElement('span'); el.className='candy'; el.innerText=emoji; container.appendChild(el);
         }
     }
-    function inputNum(n){ if(mathState.input.length<2){ mathState.input+=n; document.getElementById('math-answer').innerText=mathState.input; } }
+    function inputNum(n){ 
+        if(mathState.input.length<2){ 
+            mathState.input+=n; 
+            document.getElementById('math-answer').innerText=mathState.input; 
+            suaraCalistung(n.toString());
+        } 
+    }
     function clearAnswer(){ mathState.input=""; document.getElementById('math-answer').innerText="?"; }
     function checkAnswer(){
         if(mathState.input==="")return;
@@ -652,17 +684,17 @@
         if(parseInt(mathState.input)===mathState.answer){
             mathState.score+=10; document.getElementById('score').innerText=mathState.score;
             document.getElementById('fb-icon').innerText="🎉"; document.getElementById('fb-text').innerText="Benar!"; createConfetti();
+            suaraCalistung("Hore! Jawabanmu benar!");
         }else{
             document.getElementById('fb-icon').innerText="🥺"; document.getElementById('fb-text').innerText=`Jawabannya ${mathState.answer}`;
+            suaraCalistung("Yah, salah. Jawabannya adalah " + mathState.answer);
         }
-        
-        // Tampilkan tombol "Lanjut" saat di Game Math
         document.getElementById('modal-btn').style.display = 'block';
-        
         modal.style.display='flex';
     }
     function closeFeedback(){ document.getElementById('feedback-modal').style.display='none'; generateMath(); }
 
+    /* --- CANVAS LOGIC --- */
     const canvas=document.getElementById('drawing-board'); const ctx=canvas.getContext('2d');
     let isDrawing=false; let brushColor='black';
     
@@ -706,22 +738,17 @@
         }
     }
 
-    // Init & Popup Awal
     window.onload = function() {
         updateIndo(); updateEng(); updateArab(); updateCard();
-        
-        // Tampilkan Popup Awal
         const modal = document.getElementById('feedback-modal');
         const btn = document.getElementById('modal-btn');
-        
-        document.getElementById('fb-icon').innerText = "👋"; // Emoji Melambai
-        document.getElementById('fb-text').innerText = "Halo!"; // Teks Halo
+        document.getElementById('fb-icon').innerText = "👋";
+        document.getElementById('fb-text').innerText = "Halo!";
         modal.style.display = 'flex';
-        
-        // Pastikan tombol disembunyikan saat awal
         btn.style.display = 'none';
         
-        // Auto close setelah 2.5 detik
+        suaraCalistung("Halo! Ayo kita belajar bersama Pradhika!");
+
         setTimeout(() => {
             modal.style.display = 'none';
         }, 2500);
